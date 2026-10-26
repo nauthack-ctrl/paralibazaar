@@ -287,6 +287,7 @@ body {
   width: 100%;
   max-width: var(--app-max);
   display: flex;
+  border-radius: 24px 24px 0 0;
   background: var(--surface-container-high);
   border-top: 1px solid var(--outline-variant);
 }
@@ -305,7 +306,11 @@ body {
   border: none;
   cursor: pointer;
 }
-.nav-item svg { width: 24px; height: 24px; }
+.nav-item .material-symbols-outlined { font-size: 24px; }
+
+/* icons inherit color; the active tab's icon fills in, M3-style */
+.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+.nav-item.is-active .material-symbols-outlined { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
 
 .nav-item span {
   padding: 0 8px;

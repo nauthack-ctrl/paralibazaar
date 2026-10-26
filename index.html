@@ -8,6 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css?family=Google+Sans:400,500,700|Google+Sans+Text:400,500,700&display=swap" rel="stylesheet" />
+  <!-- Material Symbols: the M3 icon set (fill axis loads too, for active tabs) -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -16,7 +18,7 @@
 
     <!-- top bar -->
     <header class="top-bar">
-      <span class="top-bar__logo">🌾</span>
+      <span class="top-bar__logo"><span class="material-symbols-outlined">grass</span></span>
       <div>
         <h1 class="top-bar__title">ParaliBazaar</h1>
         <p class="top-bar__subtitle">Straw, not smoke</p>
@@ -64,10 +66,7 @@
 
           <!-- voice input, see voiceToForm() in app.js -->
           <button type="button" id="mic-btn" class="voice-btn" title="Speak your village">
-            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
-              <rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/>
-              <path d="M5 11a7 7 0 0 0 14 0 M12 18v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
+            <span class="material-symbols-outlined">mic</span>
             <span>Speak instead of typing</span>
           </button>
 
@@ -91,22 +90,22 @@
 
         <div class="metrics">
           <article class="card card--filled metric">
-            <span class="metric__icon">🔥</span>
+            <span class="material-symbols-outlined metric__icon">local_fire_department</span>
             <strong class="metric__value" id="m-tonnes">0</strong>
             <span class="metric__label">Tonnes diverted from burning</span>
           </article>
           <article class="card card--filled metric">
-            <span class="metric__icon">💰</span>
+            <span class="material-symbols-outlined metric__icon">payments</span>
             <strong class="metric__value" id="m-paid">₹0</strong>
             <span class="metric__label">Paid to farmers</span>
           </article>
           <article class="card card--filled metric">
-            <span class="metric__icon">🌫️</span>
+            <span class="material-symbols-outlined metric__icon">co2</span>
             <strong class="metric__value" id="m-co2">0</strong>
             <span class="metric__label">Tonnes CO₂e avoided</span>
           </article>
           <article class="card card--filled metric">
-            <span class="metric__icon">📋</span>
+            <span class="material-symbols-outlined metric__icon">checklist</span>
             <strong class="metric__value" id="m-listings">0</strong>
             <span class="metric__label">Active listings</span>
           </article>
@@ -124,36 +123,22 @@
 
     <!-- extended fab -->
     <button class="fab" id="fab-btn">
-      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
-        <path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
-      </svg>
+      <span class="material-symbols-outlined">add</span>
       <span>New listing</span>
     </button>
 
     <!-- bottom navigation -->
     <nav class="bottom-nav">
       <button class="nav-item is-active" data-view="sell">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 21v-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          <path d="M12 13c0-4 3-7 8-7 0 5-3 8-8 7z" fill="currentColor"/>
-          <path d="M12 13c0-4-3-7-8-7 0 5 3 8 8 7z" fill="currentColor"/>
-        </svg>
+        <span class="material-symbols-outlined">eco</span>
         <span>Sell</span>
       </button>
       <button class="nav-item" data-view="market">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M6 8h12l-1.1 12.1a2 2 0 0 1-2 1.9H9.1a2 2 0 0 1-2-1.9L6 8z" fill="currentColor"/>
-          <path d="M9 9V6a3 3 0 0 1 6 0v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
+        <span class="material-symbols-outlined">storefront</span>
         <span>Market</span>
       </button>
       <button class="nav-item" data-view="impact">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M4 20h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          <rect x="6" y="11" width="3" height="7" rx="1" fill="currentColor"/>
-          <rect x="11" y="7" width="3" height="11" rx="1" fill="currentColor"/>
-          <rect x="16" y="13" width="3" height="5" rx="1" fill="currentColor"/>
-        </svg>
+        <span class="material-symbols-outlined">leaderboard</span>
         <span>Impact</span>
       </button>
     </nav>
