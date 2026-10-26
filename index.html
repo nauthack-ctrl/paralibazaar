@@ -1,174 +1,286 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ParaliBazaar — Straw, not smoke</title>
-  <!-- Google Sans + Google Sans Text; system fonts as fallback -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css?family=Google+Sans:400,500,700|Google+Sans+Text:400,500,700&display=swap" rel="stylesheet" />
-  <!-- Material Symbols: the M3 icon set (fill axis loads too, for active tabs) -->
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ParaliBazaar — Straw, not smoke</title>
+    <!-- Google Sans + Google Sans Text; system fonts as fallback -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css?family=Google+Sans:400,500,700|Google+Sans+Text:400,500,700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Material Symbols: the M3 icon set (fill axis loads too, for active tabs) -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet"
+    />
+    <!-- apply saved theme before first paint to avoid a flash of light mode -->
+    <script>
+      document.documentElement.dataset.theme =
+        localStorage.getItem("paralibazaar.theme") ||
+        (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    </script>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <!-- top bar -->
+      <header class="top-bar">
+        <span class="top-bar__logo"
+          ><span class="material-symbols-outlined">grass</span></span
+        >
+        <div>
+          <h1 class="top-bar__title">ParaliBazaar</h1>
+          <p class="top-bar__subtitle">Straw, not smoke</p>
+        </div>
+        <button class="icon-btn" id="theme-btn" title="Switch theme">
+          <span class="material-symbols-outlined" id="theme-icon"
+            >dark_mode</span
+          >
+        </button>
+      </header>
 
-  <div class="app">
+      <main class="content">
+        <!-- farmer listing form -->
+        <section class="view" id="view-sell">
+          <form
+            id="list-form"
+            class="card card--elevated form-card"
+            autocomplete="off"
+          >
+            <div class="field">
+              <label for="f-village" class="field__label"
+                >Village / location · ਪਿੰਡ</label
+              >
+              <input
+                id="f-village"
+                name="village"
+                class="field__input"
+                type="text"
+                placeholder="e.g. Barnala"
+                required
+                minlength="2"
+              />
+            </div>
 
-    <!-- top bar -->
-    <header class="top-bar">
-      <span class="top-bar__logo"><span class="material-symbols-outlined">grass</span></span>
-      <div>
-        <h1 class="top-bar__title">ParaliBazaar</h1>
-        <p class="top-bar__subtitle">Straw, not smoke</p>
-      </div>
-    </header>
+            <div class="field">
+              <label for="f-acres" class="field__label"
+                >Field size (acres) · ਰਕਬਾ</label
+              >
+              <input
+                id="f-acres"
+                name="acres"
+                class="field__input"
+                type="number"
+                inputmode="decimal"
+                min="0.1"
+                step="0.1"
+                placeholder="e.g. 5"
+                required
+              />
+            </div>
 
-    <main class="content">
+            <div class="field">
+              <label for="f-tonnes" class="field__label"
+                >Straw quantity (approx. tonnes) · ਮਾਤਰਾ</label
+              >
+              <input
+                id="f-tonnes"
+                name="tonnes"
+                class="field__input"
+                type="number"
+                inputmode="decimal"
+                min="0.1"
+                step="0.1"
+                placeholder="e.g. 10"
+                required
+              />
+            </div>
 
-      <!-- farmer listing form -->
-      <section class="view" id="view-sell">
-        <h2 class="view__heading">List your parali</h2>
-        <p class="view__sub">Sell straw to boiler &amp; biomass buyers instead of burning it.</p>
+            <div class="field">
+              <label for="f-price" class="field__label"
+                >Expected price (₹ per tonne) · ਕੀਮਤ</label
+              >
+              <input
+                id="f-price"
+                name="price"
+                class="field__input"
+                type="number"
+                inputmode="numeric"
+                min="500"
+                step="100"
+                placeholder="e.g. 2500"
+                required
+              />
+            </div>
 
-        <form id="list-form" class="card card--elevated form-card" autocomplete="off">
-          <div class="field">
-            <label for="f-village" class="field__label">Village / location · ਪਿੰਡ</label>
-            <input id="f-village" name="village" class="field__input" type="text"
-                   placeholder="e.g. Barnala" required minlength="2" />
+            <div class="field">
+              <label for="f-phone" class="field__label"
+                >Contact number · ਸੰਪਰਕ</label
+              >
+              <input
+                id="f-phone"
+                name="phone"
+                class="field__input"
+                type="tel"
+                inputmode="tel"
+                pattern="[0-9+\s-]{10,13}"
+                placeholder="e.g. 98765 43210"
+                required
+              />
+            </div>
+
+            <!-- voice input, see voiceToForm() in app.js -->
+            <button
+              type="button"
+              id="mic-btn"
+              class="voice-btn"
+              title="Speak your village"
+            >
+              <span class="material-symbols-outlined">mic</span>
+              <span>Speak instead of typing</span>
+            </button>
+
+            <button type="submit" class="btn btn--filled btn--big">
+              Post listing
+            </button>
+            <p class="form-note">
+              No login needed. Buyers will call you directly.
+            </p>
+          </form>
+        </section>
+
+        <!-- buyer feed -->
+        <section class="view" id="view-market" hidden>
+          <h2 class="view__heading">Live straw listings</h2>
+          <p class="view__sub" id="market-count">—</p>
+          <div id="listing-deck"></div>
+          <p class="empty-hint" id="market-empty" hidden>
+            No listings yet — be the first!
+          </p>
+        </section>
+
+        <!-- impact metrics -->
+        <section class="view" id="view-impact" hidden>
+          <h2 class="view__heading">Impact so far</h2>
+          <p class="view__sub">Punjab fields saved from burning.</p>
+
+          <div class="metrics">
+            <article class="card card--filled metric">
+              <span class="material-symbols-outlined metric__icon"
+                >local_fire_department</span
+              >
+              <strong class="metric__value" id="m-tonnes">0</strong>
+              <span class="metric__label">Tonnes diverted from burning</span>
+            </article>
+            <article class="card card--filled metric">
+              <span class="material-symbols-outlined metric__icon"
+                >payments</span
+              >
+              <strong class="metric__value" id="m-paid">₹0</strong>
+              <span class="metric__label">Paid to farmers</span>
+            </article>
+            <article class="card card--filled metric">
+              <span class="material-symbols-outlined metric__icon">co2</span>
+              <strong class="metric__value" id="m-co2">0</strong>
+              <span class="metric__label">Tonnes CO₂e avoided</span>
+            </article>
+            <article class="card card--filled metric">
+              <span class="material-symbols-outlined metric__icon"
+                >checklist</span
+              >
+              <strong class="metric__value" id="m-listings">0</strong>
+              <span class="metric__label">Active listings</span>
+            </article>
           </div>
 
-          <div class="field">
-            <label for="f-acres" class="field__label">Field size (acres) · ਰਕਬਾ</label>
-            <input id="f-acres" name="acres" class="field__input" type="number"
-                   inputmode="decimal" min="0.1" step="0.1" placeholder="e.g. 5" required />
-          </div>
+          <p class="impact-note">
+            Every listing moves straw from the match-stick to the boiler.
+            Assumptions for the demo: ~1.27 tonnes CO₂e avoided per tonne of
+            straw diverted, and an asking-price offer counts as paid.
+          </p>
+        </section>
+      </main>
+
+      <!-- bottom navigation -->
+      <nav class="bottom-nav">
+        <button class="nav-item is-active" data-view="sell">
+          <span class="material-symbols-outlined">eco</span>
+          <span>Sell</span>
+        </button>
+        <button class="nav-item" data-view="market">
+          <span class="material-symbols-outlined">storefront</span>
+          <span>Market</span>
+        </button>
+        <button class="nav-item" data-view="impact">
+          <span class="material-symbols-outlined">leaderboard</span>
+          <span>Impact</span>
+        </button>
+      </nav>
+
+      <!-- bid modal -->
+      <dialog class="bid-dialog" id="bid-dialog">
+        <form id="bid-form" class="card card--elevated bid-card">
+          <h3 class="bid-card__title">Make an offer</h3>
+          <p class="bid-card__sub" id="bid-target">—</p>
 
           <div class="field">
-            <label for="f-tonnes" class="field__label">Straw quantity (approx. tonnes) · ਮਾਤਰਾ</label>
-            <input id="f-tonnes" name="tonnes" class="field__input" type="number"
-                   inputmode="decimal" min="0.1" step="0.1" placeholder="e.g. 10" required />
+            <label for="b-buyer" class="field__label">Buyer / company</label>
+            <input
+              id="b-buyer"
+              name="buyer"
+              class="field__input"
+              type="text"
+              placeholder="e.g. GreenFuel Punjab"
+              required
+            />
           </div>
-
           <div class="field">
-            <label for="f-price" class="field__label">Expected price (₹ per tonne) · ਕੀਮਤ</label>
-            <input id="f-price" name="price" class="field__input" type="number"
-                   inputmode="numeric" min="500" step="100" placeholder="e.g. 2500" required />
+            <label for="b-price" class="field__label"
+              >Your offer (₹ per tonne)</label
+            >
+            <input
+              id="b-price"
+              name="offer"
+              class="field__input"
+              type="number"
+              inputmode="numeric"
+              min="100"
+              step="50"
+              placeholder="e.g. 2800"
+              required
+            />
           </div>
-
           <div class="field">
-            <label for="f-phone" class="field__label">Contact number · ਸੰਪਰਕ</label>
-            <input id="f-phone" name="phone" class="field__input" type="tel"
-                   inputmode="tel" pattern="[0-9+\s-]{10,13}"
-                   placeholder="e.g. 98765 43210" required />
+            <label for="b-qty" class="field__label">Tonnes needed</label>
+            <input
+              id="b-qty"
+              name="qty"
+              class="field__input"
+              type="number"
+              inputmode="decimal"
+              min="0.5"
+              step="0.5"
+              placeholder="e.g. 8"
+              required
+            />
           </div>
 
-          <!-- voice input, see voiceToForm() in app.js -->
-          <button type="button" id="mic-btn" class="voice-btn" title="Speak your village">
-            <span class="material-symbols-outlined">mic</span>
-            <span>Speak instead of typing</span>
-          </button>
-
-          <button type="submit" class="btn btn--filled btn--big">Post listing</button>
-          <p class="form-note">No login needed. Buyers will call you directly.</p>
+          <div class="bid-card__actions">
+            <button type="button" class="btn btn--text" id="bid-cancel">
+              Later
+            </button>
+            <button type="submit" class="btn btn--filled">Send offer</button>
+          </div>
         </form>
-      </section>
+      </dialog>
 
-      <!-- buyer feed -->
-      <section class="view" id="view-market" hidden>
-        <h2 class="view__heading">Live straw listings</h2>
-        <p class="view__sub" id="market-count">—</p>
-        <div id="listing-deck"></div>
-        <p class="empty-hint" id="market-empty" hidden>No listings yet — be the first!</p>
-      </section>
+      <!-- snackbar -->
+      <div class="snackbar" id="snackbar" role="status"></div>
+    </div>
 
-      <!-- impact metrics -->
-      <section class="view" id="view-impact" hidden>
-        <h2 class="view__heading">Impact so far</h2>
-        <p class="view__sub">Punjab fields saved from burning.</p>
-
-        <div class="metrics">
-          <article class="card card--filled metric">
-            <span class="material-symbols-outlined metric__icon">local_fire_department</span>
-            <strong class="metric__value" id="m-tonnes">0</strong>
-            <span class="metric__label">Tonnes diverted from burning</span>
-          </article>
-          <article class="card card--filled metric">
-            <span class="material-symbols-outlined metric__icon">payments</span>
-            <strong class="metric__value" id="m-paid">₹0</strong>
-            <span class="metric__label">Paid to farmers</span>
-          </article>
-          <article class="card card--filled metric">
-            <span class="material-symbols-outlined metric__icon">co2</span>
-            <strong class="metric__value" id="m-co2">0</strong>
-            <span class="metric__label">Tonnes CO₂e avoided</span>
-          </article>
-          <article class="card card--filled metric">
-            <span class="material-symbols-outlined metric__icon">checklist</span>
-            <strong class="metric__value" id="m-listings">0</strong>
-            <span class="metric__label">Active listings</span>
-          </article>
-        </div>
-
-        <p class="impact-note">
-          Every listing moves straw from the match-stick to the boiler. Assumptions for the demo: ~1.27 tonnes CO₂e avoided per tonne of straw diverted, and an asking-price offer counts as paid.
-        </p>
-      </section>
-    </main>
-
-    <!-- extended fab -->
-    <button class="fab" id="fab-btn">
-      <span class="material-symbols-outlined">add</span>
-      <span>New listing</span>
-    </button>
-
-    <!-- bottom navigation -->
-    <nav class="bottom-nav">
-      <button class="nav-item is-active" data-view="sell">
-        <span class="material-symbols-outlined">eco</span>
-        <span>Sell</span>
-      </button>
-      <button class="nav-item" data-view="market">
-        <span class="material-symbols-outlined">storefront</span>
-        <span>Market</span>
-      </button>
-      <button class="nav-item" data-view="impact">
-        <span class="material-symbols-outlined">leaderboard</span>
-        <span>Impact</span>
-      </button>
-    </nav>
-
-    <!-- bid modal -->
-    <dialog class="bid-dialog" id="bid-dialog">
-      <form id="bid-form" class="card card--elevated bid-card">
-        <h3 class="bid-card__title">Make an offer</h3>
-        <p class="bid-card__sub" id="bid-target">—</p>
-
-        <div class="field">
-          <label for="b-buyer" class="field__label">Buyer / company</label>
-          <input id="b-buyer" name="buyer" class="field__input" type="text" placeholder="e.g. GreenFuel Punjab" required />
-        </div>
-        <div class="field">
-          <label for="b-price" class="field__label">Your offer (₹ per tonne)</label>
-          <input id="b-price" name="offer" class="field__input" type="number" inputmode="numeric" min="100" step="50" placeholder="e.g. 2800" required />
-        </div>
-        <div class="field">
-          <label for="b-qty" class="field__label">Tonnes needed</label>
-          <input id="b-qty" name="qty" class="field__input" type="number" inputmode="decimal" min="0.5" step="0.5" placeholder="e.g. 8" required />
-        </div>
-
-        <div class="bid-card__actions">
-          <button type="button" class="btn btn--text" id="bid-cancel">Later</button>
-          <button type="submit" class="btn btn--filled">Send offer</button>
-        </div>
-      </form>
-    </dialog>
-
-    <!-- snackbar -->
-    <div class="snackbar" id="snackbar" role="status"></div>
-  </div>
-
-  <script src="app.js"></script>
-</body>
+    <script src="app.js"></script>
+  </body>
 </html>
