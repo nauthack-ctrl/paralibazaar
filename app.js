@@ -177,14 +177,14 @@ function renderFeed() {
   deck.innerHTML = empty
     ? ''
     : listings
-        .map((l) => {
+        .map((l, i) => {
           const hasBid = l.bids.length > 0;
           const best = hasBid
             ? Math.max(...l.bids.map((b) => Number(b.offer) || 0))
             : null;
 
           return `
-            <article class="listing card card--elevated">
+            <article class="listing card card--elevated" style="animation-delay:${Math.min(i * 45, 400)}ms">
               <div class="listing__head">
                 <span class="listing__village">${esc(l.village)}</span>
                 <span class="chip ${hasBid ? 'chip--bid' : 'chip--open'}">
@@ -225,7 +225,19 @@ function openBid(id) {
   bidDialog.showModal();
 }
 
-$('#bid-cancel').addEventListener('click', () => bidDialog.close());
+$('#bid-cancel').addEventListener('click', closeBid);
+// route Esc through the same animated close
+bidDialog.addEventListener('cancel', (e) => { e.preventDefault(); closeBid(); });
+
+// animate out first, then close for real
+function closeBid() {
+  if (!bidDialog.open || bidDialog.classList.contains('closing')) return;
+  bidDialog.classList.add('closing');
+  setTimeout(() => {
+    bidDialog.close();
+    bidDialog.classList.remove('closing');
+  }, 200);
+}
 
 bidForm.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -235,13 +247,28 @@ bidForm.addEventListener('submit', (e) => {
 
   l.bids.push(offer);
   saveListings();
-  bidDialog.close();
+  closeBid();
   renderFeed();
   updateImpact();
   snackbar(`Offer sent — the farmer in ${l.village} will see it.`);
 });
 
 /* impact dashboard */
+
+// count metrics up/down instead of snapping between values
+function animateValue(el, to, fmt) {
+  const from = Number(el.dataset.val || 0);
+  el.dataset.val = to;
+  if (from === to) { el.textContent = fmt(to); return; }
+  const t0 = performance.now();
+  const step = (t) => {
+    const p = Math.min((t - t0) / 500, 1);
+    const eased = 1 - Math.pow(1 - p, 3); // ease-out cubic
+    el.textContent = fmt(from + (to - from) * eased);
+    if (p < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
 
 function updateImpact() {
   let tonnes = 0, paid = 0;
@@ -255,11 +282,11 @@ function updateImpact() {
     paid += t * price;
   }
 
-  $('#m-tonnes').textContent = compact(BASE_IMPACT.tonnes + tonnes);
-  $('#m-paid').textContent = `₹${compact(BASE_IMPACT.paid + paid)}`;
+  animateValue($('#m-tonnes'), BASE_IMPACT.tonnes + tonnes, compact);
+  animateValue($('#m-paid'), BASE_IMPACT.paid + paid, (n) => '₹' + compact(n));
   // ~1.27 t CO2e avoided per t straw diverted (open burning baseline)
-  $('#m-co2').textContent = compact(BASE_IMPACT.co2 + tonnes * 1.27);
-  $('#m-listings').textContent = BASE_IMPACT.listings + listings.length;
+  animateValue($('#m-co2'), BASE_IMPACT.co2 + tonnes * 1.27, compact);
+  animateValue($('#m-listings'), BASE_IMPACT.listings + listings.length, (n) => String(Math.round(n)));
 }
 
 /* snackbar */

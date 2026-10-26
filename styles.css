@@ -341,7 +341,7 @@ body {
   position: fixed;
   left: 50%;
   bottom: 100px;
-  transform: translateX(-50%) translateY(20px);
+  transform: translateX(-50%) translateY(20px) scale(.92);
   max-width: 420px;
   width: calc(100% - 32px);
   padding: 14px 18px;
@@ -352,10 +352,64 @@ body {
   box-shadow: var(--shadow-3);
   opacity: 0;
   pointer-events: none;
-  transition: opacity .2s, transform .2s;
+  transition: opacity .25s var(--ease), transform .25s var(--ease);
   z-index: 10;
 }
-.snackbar.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.snackbar.show { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+
+/* motion: M3 easing shared by everything below */
+:root { --ease: cubic-bezier(.2, 0, 0, 1); }
+
+/* views slide up as tabs switch */
+.view { animation: rise-in .3s var(--ease); }
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(14px); }
+}
+
+/* listing cards stagger in as the deck builds */
+.listing { animation: rise-in .35s var(--ease) backwards; }
+
+/* impact cards stagger by position */
+.metric { animation: rise-in .35s var(--ease) backwards; }
+.metrics .metric:nth-child(2) { animation-delay: 60ms; }
+.metrics .metric:nth-child(3) { animation-delay: 120ms; }
+.metrics .metric:nth-child(4) { animation-delay: 180ms; }
+
+/* fab drops in when it reappears */
+.fab:not([hidden]) { animation: rise-in .3s var(--ease); }
+
+/* nav pill + icon color follow the tab */
+.nav-item { transition: color .2s var(--ease); }
+.nav-item span { transition: background-color .25s var(--ease); }
+.nav-item .material-symbols-outlined {
+  transition: color .2s var(--ease), font-variation-settings .2s var(--ease);
+}
+
+/* dialog: scale-rise in, animated backdrop both ways */
+dialog[open] { animation: pop-in .28s var(--ease); }
+dialog[open]::backdrop { animation: fade-in .28s var(--ease); }
+@keyframes pop-in {
+  from { opacity: 0; transform: translateY(24px) scale(.92); }
+}
+@keyframes fade-in { from { opacity: 0; } }
+.bid-dialog.closing { animation: pop-out .2s var(--ease) forwards; pointer-events: none; }
+.bid-dialog.closing::backdrop { animation: fade-out .2s var(--ease) forwards; }
+@keyframes pop-out {
+  to { opacity: 0; transform: translateY(16px) scale(.95); }
+}
+@keyframes fade-out { to { opacity: 0; } }
+
+/* mic rings while recording */
+.voice-btn.listening { animation: ring 1.4s var(--ease) infinite; }
+@keyframes ring {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(46, 107, 39, .35); }
+  50%       { box-shadow: 0 0 0 10px rgba(46, 107, 39, 0); }
+}
+
+/* respect users who turn motion off */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
 
 /* wider screens: feed goes 2-up, then 3-up, metrics 4-up, form 2-col */
 @media (min-width: 600px) {
