@@ -197,7 +197,7 @@ function renderFeed() {
                 <span>asking <strong>₹${Number(l.price).toLocaleString('en-IN')}</strong>/t</span>
               </div>
               <div class="listing__actions">
-                <a class="link-chip" href="tel:${esc(l.phone)}">📞 Call</a>
+                <a class="link-chip" href="tel:${esc(l.phone)}"><span class="material-symbols-outlined">call</span>Call</a>
                 <button class="btn btn--filled" data-bid="${l.id}">Make offer</button>
               </div>
             </article>`;
